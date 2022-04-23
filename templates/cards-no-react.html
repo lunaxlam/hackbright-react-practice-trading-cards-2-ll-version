@@ -1,0 +1,92 @@
+{% extends 'base.html' %} {% block title %} Cards {% endblock %} {% block body
+%}
+<div>
+  <h2>Add New Trading Card</h2>
+
+  Name <input type="text" id="nameField" /> 
+  Skill <input type="text" id="skillField" />
+  <button id="addCard">Add</button>
+
+  <h2>Trading Cards</h2>
+</div>
+
+<div id="container" class="grid"></div>
+{% endblock %} {% block js %}
+<script>
+  function getCardData() {
+    // Get the up to date card data from DB.
+
+    fetch("/cards.json")
+      .then((response) => response.json())
+      .then((data) => insertCardData(data));
+  }
+
+  const createCardAndAddToContainer = (name, skill, imgUrl) => {
+    const cardElement = document.createElement("div");
+    cardElement.classList.add("card");
+    cardElement.innerHTML = `
+        <p>Name: ${name}</p>
+        <img src='${imgUrl}'>
+        <p>Skill: ${skill} </p>
+    `;
+    document.querySelector("#container").append(cardElement);
+  };
+
+  const insertCardData = (response) => {
+    // Once the data has been provided by the server,
+    // insert it into the page as an HTML string.
+    const listOfCards = response.cards;
+
+    const container = document.querySelector("#container");
+
+    // empty the container so it has no content
+    container.innerHTML = "";
+
+    for (const currentCard of listOfCards) {
+      if (!currentCard.imgUrl) {
+        currentCard.imgUrl = "/static/img/placeholder.png";
+      }
+      createCardAndAddToContainer(
+        currentCard.name,
+        currentCard.skill,
+        currentCard.imgUrl
+      );
+    }
+  };
+
+  const addNewCard = (evt) => {
+    // Respond to the Add New Card form getting submitted.
+    // This is an event handling function.
+
+    // Get name that user typed in Name field.
+    const name = document.querySelector("#nameField").value;
+
+    // Get skill that user typed in Skill field.
+    const skill = document.querySelector("#skillField").value;
+
+    // Make a request to the server to add the card
+    // the server sends us a response with the new card
+    // We then add this card to the page
+    fetch("/add-card", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, skill }),
+    })
+      .then((response) => response.json())
+      .then((jsonResponse) => {
+        const name = jsonResponse.cardAdded.name;
+        const skill = jsonResponse.cardAdded.skill;
+        const imgUrl = "/static/img/placeholder.png";
+        createCardAndAddToContainer(name, skill, imgUrl);
+      });
+  };
+
+  // Attach the addNewCard function to the 'Add' button click.
+  document.querySelector("#addCard").addEventListener("click", addNewCard);
+
+  // Get intial cards when page initially loads!
+  getCardData();
+</script>
+{% endblock %}
