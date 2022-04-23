@@ -77,9 +77,16 @@ def get_cards_json():
 
 @app.route("/add-card", methods=["POST"])
 def add_card():
-    """Add a new card to the DB."""
+    """Add a new card to the DB. POST method is used here."""
+
+    # Reading the incoming JSON data from the AddTradingCard component
+
+    # request.get_sjon() converts the JSON object back into Python data 
     name = request.get_json().get("name")
     skill = request.get_json().get("skill")
+
+    # Now that the JSON object is in Python data format, we can create a new dictionary object to append
+    # into our CARD_DATA list data structure 
 
     new_card = {
         "name": name,
@@ -88,6 +95,8 @@ def add_card():
         "cardId": len(CARD_DATA) + 1,
     }
     CARD_DATA.append(new_card)
+
+    # After we append the new data, we want to return it back into a JSON object for our JSX file use
     return jsonify({"success": True, "cardAdded": new_card})
 
 
