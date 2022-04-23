@@ -70,7 +70,7 @@ function TradingCardContainer() {
   // The second argument lets useEffect know not to run the function IF the argument passed to the function provided has NOT changed 
   // Use an empty array as the second argument to run the effect only one time; otherwise, pass in your args as an array
   React.useEffect(() => {
-    fetch('/cards.json')
+    fetch('/cards-further-study.json')
     // Parse the response as JSON
     .then(response => response.json())
     // Here we define when the component's state should change; update the tradingCards component with the data

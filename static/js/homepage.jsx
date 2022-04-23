@@ -9,7 +9,9 @@ function Homepage() {
         Click here to view the trading cards page written with plain JavaScript and no React.
       </a>
       <br />
-      <a href="/cards">Click here to view the trading cards page in React.</a>
+      <a href="/cards">Click here to view the trading cards page in React. Only available with server.py</a>
+      <br />
+      <a href="/cards-further-study">Click here to view the Further Study trading cards page in React. Only available with server-futherstudy.py</a>
     </React.Fragment>
   );
 }

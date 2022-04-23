@@ -65,7 +65,7 @@ def show_homepage():
 def show_cards():
     """Show all trading cards."""
 
-    return render_template("cards.html")
+    return render_template("cards-further-study.html")
 
 
 @app.route("/cards-further-study.json")
